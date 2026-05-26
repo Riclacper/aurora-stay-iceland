@@ -1,3 +1,4 @@
+import React from "react";
 import { BarChart3, Hotel, Plus, Users } from "lucide-react";
 import { dashboardStats, recentBookings } from "../data/dashboard.js";
 

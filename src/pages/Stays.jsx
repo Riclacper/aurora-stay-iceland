@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { stays } from "../data/stays.js";
