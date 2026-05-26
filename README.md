@@ -161,6 +161,6 @@ Este projeto foi desenvolvido para fins acadêmicos na disciplina de High Tech A
 
 ## Autor
 
-Ricardo Lacerda Pereira
+ADS035N-5P-2026.1-RLP
 
 Projeto acadêmico — Aurora Stay Iceland © 2026
