@@ -2,18 +2,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Star, Users } from "lucide-react";
 
-export default function StayCard({ stay }) {
+export default function StayCard({ stay, queryString = "" }) {
+  const detailsUrl = queryString
+    ? `/hospedagens/${stay.id}?${queryString}`
+    : `/hospedagens/${stay.id}`;
+
   return (
     <article className="stay-card">
-      <Link to={`/hospedagens/${stay.id}`} className="stay-image-wrap">
+      <Link to={detailsUrl} className="stay-image-wrap">
         <img
           src={stay.image}
           alt={stay.name}
           className="stay-image"
-          onError={(e) => {
-            e.currentTarget.src = `https://picsum.photos/seed/fallback-${stay.id}/900/600`;
-          }}
-        />{" "}
+          loading="lazy"
+          decoding="async"
+        />
         <span className="price-badge">${stay.price}/noite</span>
       </Link>
       <div className="stay-content">
@@ -26,7 +29,7 @@ export default function StayCard({ stay }) {
         <h3>{stay.name}</h3>
         <p className="muted">
           <MapPin size={16} /> {stay.location}
-        </p>{" "}
+        </p>
         <p className="muted">
           <Users size={16} /> Até {stay.guests} hóspedes
         </p>
@@ -35,7 +38,7 @@ export default function StayCard({ stay }) {
             <span key={tag}>{tag}</span>
           ))}
         </div>
-        <Link to={`/hospedagens/${stay.id}`} className="btn btn-dark full">
+        <Link to={detailsUrl} className="btn btn-dark full">
           Ver detalhes
         </Link>
       </div>
