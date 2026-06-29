@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Star, Users } from "lucide-react";
+import { applyStayImageFallback } from "../utils/imageFallback.js";
 
 export default function StayCard({ stay, queryString = "" }) {
   const detailsUrl = queryString
@@ -16,6 +17,7 @@ export default function StayCard({ stay, queryString = "" }) {
           className="stay-image"
           loading="lazy"
           decoding="async"
+          onError={(event) => applyStayImageFallback(event, stay.id)}
         />
         <span className="price-badge">${stay.price}/noite</span>
       </Link>
