@@ -1,13 +1,14 @@
 export const dashboardStats = [
-  { label: 'Reservas confirmadas', value: '225', trend: '+18%', helper: 'comparado ao mês anterior' },
-  { label: 'Hospedagens ativas', value: '42', trend: '+6', helper: 'novas propriedades' },
-  { label: 'Receita estimada', value: '$84.2k', trend: '+24%', helper: 'no trimestre' },
-  { label: 'Avaliação média', value: '4.9', trend: 'Excelente', helper: 'baseado em 638 avaliações' }
+  { label: "Reservas simuladas", value: "238", trend: "+18%", helper: "comparado ao ciclo anterior" },
+  { label: "Hospedagens no catálogo", value: "60", trend: "+10", helper: "novas opções demonstrativas" },
+  { label: "Volume projetado", value: "92,4 mil", trend: "+24%", helper: "indicador fictício do trimestre" },
+  { label: "Avaliação média", value: "4,8", trend: "Excelente", helper: "métrica demonstrativa" }
 ]
 
 export const recentBookings = [
-  { guest: 'Emma Johnson', stay: 'Northern Lights Cabin', date: '10/06/2026', status: 'Confirmada', total: '$1.490' },
-  { guest: 'Lars Petersen', stay: 'Glacier View Lodge', date: '14/06/2026', status: 'Pendente', total: '$1.860' },
-  { guest: 'Marina Costa', stay: 'Aurora Glass House', date: '22/06/2026', status: 'Confirmada', total: '$2.100' },
-  { guest: 'Noah Miller', stay: 'Fjord Snow Retreat', date: '02/07/2026', status: 'Confirmada', total: '$1.550' }
+  { guest: "Emma Johnson", stay: "Northern Lights Cabin 01", date: "03/07/2026", status: "Confirmada", total: "US$ 1.490,00" },
+  { guest: "Lars Petersen", stay: "Glacier Lodge 03", date: "08/07/2026", status: "Pendente", total: "US$ 1.860,00" },
+  { guest: "Marina Costa", stay: "Arctic Sky House 05", date: "14/07/2026", status: "Confirmada", total: "US$ 2.100,00" },
+  { guest: "Noah Miller", stay: "Fjord Residence 09", date: "22/07/2026", status: "Confirmada", total: "US$ 1.550,00" },
+  { guest: "Sofia Martins", stay: "Golden Circle Haven 20", date: "02/08/2026", status: "Pendente", total: "US$ 2.340,00" }
 ]
