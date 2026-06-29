@@ -25,7 +25,7 @@ export default function Header() {
           </span>
         </Link>
 
-        <nav className="desktop-nav">
+        <nav className="desktop-nav" aria-label="Navegação principal">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -45,21 +45,26 @@ export default function Header() {
 
         <button
           className="mobile-menu"
+          type="button"
           onClick={() => setOpen(!open)}
-          aria-label="Abrir menu"
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
         >
           {open ? <X /> : <Menu />}
         </button>
       </div>
 
       {open && (
-        <div className="mobile-nav container">
+        <div id="mobile-navigation" className="mobile-nav container">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               onClick={() => setOpen(false)}
-              className="mobile-link"
+              className={({ isActive }) =>
+                isActive ? "mobile-link active" : "mobile-link"
+              }
             >
               {link.label}
             </NavLink>
