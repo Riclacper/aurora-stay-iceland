@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { CalendarDays, CheckCircle2, ShieldCheck, UserRound } from "lucide-react";
 import { stays } from "../data/stays.js";
@@ -20,12 +20,21 @@ function addDays(date, days) {
   return result;
 }
 
+function isValidDateInput(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value || "");
+}
+
 function parseDate(value) {
   return new Date(`${value}T12:00:00`);
 }
 
 function isValidRange(checkIn, checkOut, today) {
-  return Boolean(checkIn && checkOut && checkIn >= today && checkOut > checkIn);
+  return Boolean(
+    isValidDateInput(checkIn) &&
+      isValidDateInput(checkOut) &&
+      checkIn >= today &&
+      checkOut > checkIn,
+  );
 }
 
 function createInitialDates(searchParams) {
@@ -46,15 +55,21 @@ function createInitialDates(searchParams) {
   };
 }
 
+function calculateNights(checkIn, checkOut) {
+  if (!isValidDateInput(checkIn) || !isValidDateInput(checkOut)) return 0;
+
+  return Math.max(
+    0,
+    Math.round((parseDate(checkOut) - parseDate(checkIn)) / DAY_IN_MS),
+  );
+}
+
 export default function Booking() {
   const { id } = useParams();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const stay = stays.find((item) => item.id === Number(id));
-  const initialDates = useMemo(
-    () => createInitialDates(searchParams),
-    [searchParams],
-  );
+  const initialDates = createInitialDates(searchParams);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -69,18 +84,12 @@ export default function Booking() {
   if (!stay) return <NotFound />;
 
   const today = formatDateInput(new Date());
-  const minimumCheckOut = formatDateInput(
-    addDays(parseDate(formData.checkIn), 1),
-  );
+  const minimumCheckOut = isValidDateInput(formData.checkIn)
+    ? formatDateInput(addDays(parseDate(formData.checkIn), 1))
+    : today;
   const requestedGuests = Number(searchParams.get("hospedes"));
   const guests = requestedGuests > 0 ? requestedGuests : 2;
-  const nights = Math.max(
-    0,
-    Math.round(
-      (parseDate(formData.checkOut) - parseDate(formData.checkIn)) /
-        DAY_IN_MS,
-    ),
-  );
+  const nights = calculateNights(formData.checkIn, formData.checkOut);
   const subtotal = stay.price * nights;
   const total = subtotal + FEES;
   const disabled = Boolean(confirmationCode);
@@ -93,11 +102,13 @@ export default function Booking() {
 
   function handleCheckInChange(event) {
     const value = event.target.value;
+
     setFormData((current) => ({
       ...current,
       checkIn: value,
       checkOut:
-        !current.checkOut || current.checkOut <= value
+        isValidDateInput(value) &&
+        (!current.checkOut || current.checkOut <= value)
           ? formatDateInput(addDays(parseDate(value), 1))
           : current.checkOut,
     }));
@@ -116,10 +127,13 @@ export default function Booking() {
     }
     if (!formData.phone.trim()) nextErrors.phone = "Informe o telefone.";
     if (!formData.document.trim()) nextErrors.document = "Informe o documento.";
-    if (formData.checkIn < today) {
-      nextErrors.checkIn = "O check-in não pode ser anterior a hoje.";
+    if (!isValidDateInput(formData.checkIn) || formData.checkIn < today) {
+      nextErrors.checkIn = "Informe um check-in válido a partir de hoje.";
     }
-    if (formData.checkOut <= formData.checkIn) {
+    if (
+      !isValidDateInput(formData.checkOut) ||
+      formData.checkOut <= formData.checkIn
+    ) {
       nextErrors.checkOut = "O check-out deve ser posterior ao check-in.";
     }
 
@@ -148,7 +162,12 @@ export default function Booking() {
           {confirmationCode && (
             <div className="filter-note" aria-live="polite">
               <CheckCircle2 size={20} />
-              Reserva demonstrativa confirmada: <strong>{confirmationCode}</strong>
+              <div>
+                <strong>Reserva demonstrativa confirmada: {confirmationCode}</strong>
+                <p>{stay.name} — {stay.location}</p>
+                <p>{formData.checkIn} a {formData.checkOut}</p>
+                <p>{nights} noite(s), {guests} hóspede(s), total ${total}</p>
+              </div>
             </div>
           )}
 
