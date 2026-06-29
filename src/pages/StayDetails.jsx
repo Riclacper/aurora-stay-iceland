@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { stays } from "../data/stays.js";
 import { MapPin, Star, Users } from "lucide-react";
+import { stays } from "../data/stays.js";
+import { applyStayImageFallback } from "../utils/imageFallback.js";
 
 export default function StayDetails() {
   const { id } = useParams();
@@ -32,9 +33,7 @@ export default function StayDetails() {
             src={stay.image}
             alt={stay.name}
             className="details-image"
-            onError={(event) => {
-              event.currentTarget.src = `https://picsum.photos/seed/fallback-details-${stay.id}/1200/800`;
-            }}
+            onError={(event) => applyStayImageFallback(event, stay.id)}
           />
         </div>
 
