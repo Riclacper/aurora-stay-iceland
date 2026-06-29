@@ -14,6 +14,20 @@ function formatDateInput(date) {
   return `${year}-${month}-${day}`;
 }
 
+function formatDisplayDate(value) {
+  if (!isValidDateInput(value)) return value;
+
+  const [year, month, day] = value.split("-");
+  return `${day}/${month}/${year}`;
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "USD",
+  }).format(value);
+}
+
 function addDays(date, days) {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
@@ -165,8 +179,12 @@ export default function Booking() {
               <div>
                 <strong>Reserva demonstrativa confirmada: {confirmationCode}</strong>
                 <p>{stay.name} — {stay.location}</p>
-                <p>{formData.checkIn} a {formData.checkOut}</p>
-                <p>{nights} noite(s), {guests} hóspede(s), total ${total}</p>
+                <p>
+                  {formatDisplayDate(formData.checkIn)} a {formatDisplayDate(formData.checkOut)}
+                </p>
+                <p>
+                  {nights} noite(s), {guests} hóspede(s), total {formatCurrency(total)}
+                </p>
               </div>
             </div>
           )}
@@ -289,8 +307,8 @@ export default function Booking() {
           <h2>{stay.name}</h2>
           <p>{stay.location}</p>
           <div className="summary-line">
-            <span>${stay.price} x {nights} noite(s)</span>
-            <strong>${subtotal}</strong>
+            <span>{formatCurrency(stay.price)} x {nights} noite(s)</span>
+            <strong>{formatCurrency(subtotal)}</strong>
           </div>
           <div className="summary-line">
             <span>Hóspedes</span>
@@ -298,11 +316,11 @@ export default function Booking() {
           </div>
           <div className="summary-line">
             <span>Taxas</span>
-            <strong>${FEES}</strong>
+            <strong>{formatCurrency(FEES)}</strong>
           </div>
           <div className="summary-total">
             <span>Total</span>
-            <strong>${total}</strong>
+            <strong>{formatCurrency(total)}</strong>
           </div>
           <button
             type="submit"
