@@ -37,7 +37,15 @@ function formatCompactCurrency(value) {
   }).format(value);
 }
 
+function formatPercentage(value) {
+  return new Intl.NumberFormat("pt-BR", {
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
 function EvolutionChart({ data }) {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const width = 720;
   const height = 250;
   const paddingX = 36;
@@ -55,17 +63,37 @@ function EvolutionChart({ data }) {
     return { ...item, x, y };
   });
 
+  const activeIndex = hoveredIndex ?? selectedIndex;
+  const activePoint = activeIndex === null ? null : coordinates[activeIndex];
   const linePoints = coordinates.map(({ x, y }) => `${x},${y}`).join(" ");
   const areaPoints = `${paddingX},${height - paddingY} ${linePoints} ${
     width - paddingX
   },${height - paddingY}`;
+  const tooltipWidth = 142;
+  const tooltipHeight = 52;
+  const tooltipX = activePoint
+    ? Math.min(
+        Math.max(activePoint.x - tooltipWidth / 2, 8),
+        width - tooltipWidth - 8,
+      )
+    : 0;
+  const tooltipY = activePoint
+    ? Math.max(activePoint.y - tooltipHeight - 14, 8)
+    : 0;
+
+  function handlePointKeyDown(event, index) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setSelectedIndex((current) => (current === index ? null : index));
+    }
+  }
 
   return (
     <div className="dashboard-line-chart">
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="Evolução mensal das reservas simuladas"
+        aria-label="Evolução mensal das reservas simuladas. Passe o mouse ou toque nos pontos para ver os valores."
       >
         <defs>
           <linearGradient id="booking-area" x1="0" y1="0" x2="0" y2="1">
@@ -91,55 +119,205 @@ function EvolutionChart({ data }) {
         <polygon points={areaPoints} fill="url(#booking-area)" />
         <polyline points={linePoints} className="chart-line" />
 
-        {coordinates.map(({ label, value, x, y }) => (
-          <g key={label}>
-            <circle cx={x} cy={y} r="5" className="chart-point" />
-            <text x={x} y={height - 9} textAnchor="middle" className="chart-label">
-              {label}
+        {coordinates.map(({ label, value, x, y }, index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <g
+              key={label}
+              className={`chart-point-group${isActive ? " active" : ""}`}
+              role="button"
+              tabIndex="0"
+              aria-label={`${label}: ${value} reservas. Clique ou toque para fixar esta informação.`}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onFocus={() => setHoveredIndex(index)}
+              onBlur={() => setHoveredIndex(null)}
+              onClick={() =>
+                setSelectedIndex((current) => (current === index ? null : index))
+              }
+              onKeyDown={(event) => handlePointKeyDown(event, index)}
+            >
+              <circle cx={x} cy={y} r="16" className="chart-point-target" />
+              <circle
+                cx={x}
+                cy={y}
+                r={isActive ? 7 : 5}
+                className="chart-point"
+              />
+              <text
+                x={x}
+                y={height - 9}
+                textAnchor="middle"
+                className="chart-label"
+              >
+                {label}
+              </text>
+            </g>
+          );
+        })}
+
+        {activePoint && (
+          <g
+            className="chart-tooltip"
+            transform={`translate(${tooltipX} ${tooltipY})`}
+            pointerEvents="none"
+          >
+            <rect width={tooltipWidth} height={tooltipHeight} rx="12" />
+            <text x="12" y="20" className="chart-tooltip-title">
+              {activePoint.label}
             </text>
-            <title>{`${label}: ${value} reservas`}</title>
+            <text x="12" y="39" className="chart-tooltip-value">
+              {activePoint.value} reservas
+            </text>
           </g>
-        ))}
+        )}
       </svg>
+
+      <p className="chart-interaction-hint">
+        Passe o mouse ou toque em um ponto. Toque novamente para desmarcar.
+      </p>
     </div>
   );
 }
 
 function StatusDonut({ statuses }) {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const total = statuses.reduce((sum, item) => sum + item.value, 0);
-  let cursor = 0;
-  const gradient = statuses
-    .map((item) => {
-      const start = cursor;
-      const end = cursor + (item.value / total) * 100;
-      cursor = end;
-      return `${chartColors[item.tone]} ${start}% ${end}%`;
-    })
-    .join(", ");
+  const radius = 72;
+  const circumference = 2 * Math.PI * radius;
+  let accumulatedLength = 0;
+
+  const segments = statuses.map((item) => {
+    const percentage = (item.value / total) * 100;
+    const rawLength = (percentage / 100) * circumference;
+    const segment = {
+      ...item,
+      percentage,
+      dashLength: Math.max(rawLength - 4, 0),
+      dashOffset: -accumulatedLength,
+    };
+    accumulatedLength += rawLength;
+    return segment;
+  });
+
+  const activeIndex = hoveredIndex ?? selectedIndex;
+  const activeSegment = activeIndex === null ? null : segments[activeIndex];
+
+  function handleSegmentKeyDown(event, index) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setSelectedIndex((current) => (current === index ? null : index));
+    }
+  }
 
   return (
     <div className="status-chart-layout">
-      <div
-        className="status-donut"
-        style={{ background: `conic-gradient(${gradient})` }}
-        role="img"
-        aria-label={`Distribuição de ${total} reservas por status`}
-      >
-        <div>
-          <strong>{total}</strong>
-          <span>reservas</span>
-        </div>
+      <div className="interactive-donut-wrap">
+        <svg
+          className="interactive-donut"
+          viewBox="0 0 220 220"
+          role="img"
+          aria-label={`Distribuição de ${total} reservas por status. Passe o mouse ou toque nos setores para ver a porcentagem.`}
+        >
+          <circle
+            cx="110"
+            cy="110"
+            r={radius}
+            fill="none"
+            stroke="#e2e8f0"
+            strokeWidth="28"
+          />
+
+          {segments.map((segment, index) => {
+            const isActive = activeIndex === index;
+
+            return (
+              <circle
+                key={segment.label}
+                cx="110"
+                cy="110"
+                r={radius}
+                fill="none"
+                stroke={chartColors[segment.tone]}
+                strokeWidth={isActive ? 33 : 28}
+                strokeDasharray={`${segment.dashLength} ${
+                  circumference - segment.dashLength
+                }`}
+                strokeDashoffset={segment.dashOffset}
+                transform="rotate(-90 110 110)"
+                className={`status-donut-segment${isActive ? " active" : ""}`}
+                role="button"
+                tabIndex="0"
+                aria-label={`${segment.label}: ${formatPercentage(
+                  segment.percentage,
+                )}% — ${segment.value} reservas. Clique ou toque para fixar.`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onFocus={() => setHoveredIndex(index)}
+                onBlur={() => setHoveredIndex(null)}
+                onClick={() =>
+                  setSelectedIndex((current) =>
+                    current === index ? null : index,
+                  )
+                }
+                onKeyDown={(event) => handleSegmentKeyDown(event, index)}
+              />
+            );
+          })}
+
+          <g className="donut-center-content" pointerEvents="none">
+            {activeSegment ? (
+              <>
+                <text x="110" y="99" textAnchor="middle" className="donut-percentage">
+                  {formatPercentage(activeSegment.percentage)}%
+                </text>
+                <text x="110" y="121" textAnchor="middle" className="donut-label">
+                  {activeSegment.label}
+                </text>
+                <text x="110" y="140" textAnchor="middle" className="donut-value">
+                  {activeSegment.value} reservas
+                </text>
+              </>
+            ) : (
+              <>
+                <text x="110" y="108" textAnchor="middle" className="donut-total">
+                  {total}
+                </text>
+                <text x="110" y="130" textAnchor="middle" className="donut-label">
+                  reservas
+                </text>
+              </>
+            )}
+          </g>
+        </svg>
       </div>
 
-      <div className="status-legend">
-        {statuses.map((item) => (
-          <div key={item.label}>
+      <div className="status-legend interactive-status-legend">
+        {segments.map((item, index) => (
+          <button
+            key={item.label}
+            type="button"
+            className={activeIndex === index ? "active" : ""}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            onFocus={() => setHoveredIndex(index)}
+            onBlur={() => setHoveredIndex(null)}
+            onClick={() =>
+              setSelectedIndex((current) => (current === index ? null : index))
+            }
+          >
             <i style={{ background: chartColors[item.tone] }} />
             <span>{item.label}</span>
-            <strong>{item.value}</strong>
-          </div>
+            <strong>{formatPercentage(item.percentage)}%</strong>
+          </button>
         ))}
       </div>
+
+      <p className="chart-interaction-hint">
+        Passe o mouse ou toque em um setor para ver a porcentagem.
+      </p>
     </div>
   );
 }
