@@ -1,13 +1,32 @@
+import { useLayoutEffect } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { MapPin, Star, Users } from "lucide-react";
 import { stays } from "../data/stays.js";
 import { applyStayImageFallback } from "../utils/imageFallback.js";
+
+function forceDetailsToTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
 
 export default function StayDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const stay = stays.find((item) => item.id === Number(id));
+
+  useLayoutEffect(() => {
+    forceDetailsToTop();
+
+    const animationFrame = window.requestAnimationFrame(forceDetailsToTop);
+    const timer = window.setTimeout(forceDetailsToTop, 180);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(timer);
+    };
+  }, [id]);
 
   if (!stay) {
     return (
