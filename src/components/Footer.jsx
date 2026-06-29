@@ -1,60 +1,96 @@
 import React from "react";
-import { Mountain, Globe, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  ExternalLink,
+  Github,
+  Linkedin,
+  Mail,
+  Mountain,
+} from "lucide-react";
+
+const portfolioUrl = "https://portfolio-ricardo-lacerda.vercel.app/#projetos";
+
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-grid">
         <div className="footer-column footer-brand-column">
           <div className="footer-brand">
-            <Mountain size={24} />
+            <Mountain size={26} />
             <div>
               <strong>Aurora Stay Iceland</strong>
-              <span>Luxury Nordic Experience</span>
+              <span>Nordic Experience Prototype</span>
             </div>
           </div>
 
           <p className="footer-description">
-            Plataforma premium para descoberta e reservas de hospedagens
-            exclusivas nas regiões mais incríveis da Islândia.
+            Protótipo acadêmico para descoberta de hospedagens e simulação de
+            reservas em regiões estratégicas da Islândia.
           </p>
 
-          <div className="footer-socials">
-            <button type="button">
-              <Globe size={18} />
-            </button>
-
-            <button type="button">
+          <div className="footer-socials" aria-label="Links do desenvolvedor">
+            <a
+              href="https://github.com/Riclacper"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub de Ricardo Lacerda Pereira"
+              title="GitHub"
+            >
+              <Github size={18} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ricardo-lacerda-pereira/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn de Ricardo Lacerda Pereira"
+              title="LinkedIn"
+            >
+              <Linkedin size={18} />
+            </a>
+            <a
+              href="mailto:ricardolacper@gmail.com"
+              aria-label="Enviar e-mail para Ricardo Lacerda Pereira"
+              title="E-mail"
+            >
               <Mail size={18} />
-            </button>
+            </a>
           </div>
         </div>
 
         <div className="footer-column">
           <h4>Navegação</h4>
-          <a href="/">Início</a>
-          <a href="/hospedagens">Hospedagens</a>
-          <a href="/admin">Control Center</a>
+          <Link to="/">Início</Link>
+          <Link to="/hospedagens">Hospedagens</Link>
+          <Link to="/admin">Control Center</Link>
+          <Link to="/login">Acesso administrativo</Link>
         </div>
 
         <div className="footer-column">
-          <h4>Tecnologias</h4>
+          <h4>Tecnologias atuais</h4>
           <span>React + Vite</span>
-          <span>Node.js</span>
-          <span>MongoDB</span>
-          <span>Arquitetura SPA</span>
+          <span>React Router</span>
+          <span>Framer Motion</span>
+          <span>Lucide React</span>
         </div>
 
         <div className="footer-column">
-          <h4>Projeto acadêmico</h4>
-          <span>UX/UI moderno</span>
-          <span>Filtros inteligentes</span>
-          <span>Protótipo funcional</span>
-          <span>Hospedagem futura</span>
+          <h4>Escopo do projeto</h4>
+          <span>UX/UI responsivo</span>
+          <span>Filtros e paginação</span>
+          <span>Reserva demonstrativa</span>
+          <span>Dados locais sem backend</span>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <p>© 2026 Aurora Stay Iceland. Todos os direitos reservados.</p>
+      <div className="container footer-bottom">
+        <p>© 2026 Aurora Stay Iceland. Projeto acadêmico demonstrativo.</p>
+        <p className="portfolio-credit">
+          Desenvolvido por{" "}
+          <a href={portfolioUrl} target="_blank" rel="noreferrer">
+            Ricardo Lacerda Pereira
+            <ExternalLink size={14} />
+          </a>
+        </p>
       </div>
     </footer>
   );
