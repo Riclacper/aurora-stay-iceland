@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   ArrowUpDown,
@@ -14,7 +14,7 @@ import {
 import { stays } from "../data/stays.js";
 import StayCard from "../components/StayCard.jsx";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 8;
 
 const regions = [
   "Todas",
@@ -36,6 +36,7 @@ const categories = [
   { value: "Todas", label: "Todas" },
   { value: "aurora", label: "Aurora" },
   { value: "luxo", label: "Luxo" },
+  { value: "premium", label: "Premium" },
   { value: "romantico", label: "Romântico" },
   { value: "familia", label: "Família" },
   { value: "economico", label: "Econômico" },
@@ -176,6 +177,7 @@ export default function Stays() {
   detailsParams.delete("pagina");
   detailsParams.delete("ordem");
   const queryString = detailsParams.toString();
+
   const hasActiveFilters =
     Boolean(search) ||
     region !== "Todas" ||
@@ -191,7 +193,7 @@ export default function Stays() {
           <h1>Encontre seu refúgio na Islândia</h1>
           <p>
             Explore {stays.length} opções demonstrativas com filtros por região,
-            perfil da viagem, capacidade e faixa de preço.
+            perfil da viagem e capacidade.
           </p>
         </div>
         <div className="catalog-heading-badge">
@@ -350,7 +352,11 @@ export default function Stays() {
                 <p>
                   Tente buscar por outra região, nome, categoria ou capacidade.
                 </p>
-                <button className="btn btn-dark" type="button" onClick={clearFilters}>
+                <button
+                  className="btn btn-dark"
+                  type="button"
+                  onClick={clearFilters}
+                >
                   Limpar filtros
                 </button>
               </div>
