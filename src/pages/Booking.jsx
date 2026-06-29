@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import { CalendarDays, CheckCircle2, ShieldCheck, UserRound } from "lucide-react";
 import { stays } from "../data/stays.js";
+import { applyStayImageFallback } from "../utils/imageFallback.js";
 import NotFound from "./NotFound.jsx";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
@@ -303,7 +304,11 @@ export default function Booking() {
         </div>
 
         <aside className="summary-card">
-          <img src={stay.image} alt={stay.name} />
+          <img
+            src={stay.image}
+            alt={stay.name}
+            onError={(event) => applyStayImageFallback(event, stay.id)}
+          />
           <h2>{stay.name}</h2>
           <p>{stay.location}</p>
           <div className="summary-line">
