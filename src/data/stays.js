@@ -1,140 +1,144 @@
-export const stays = Array.from({ length: 50 }, (_, index) => {
-  const cities = [
-    "Reykjavík",
-    "Vík",
-    "Höfn",
-    "Akureyri",
-    "Costa Sul",
-    "Westfjords",
-    "Golden Circle",
-    "Blue Lagoon",
-    "Sudeste",
-    "Norte",
-  ];
+const cities = [
+  "Reykjavík",
+  "Vík",
+  "Höfn",
+  "Akureyri",
+  "Costa Sul",
+  "Westfjords",
+  "Golden Circle",
+  "Blue Lagoon",
+  "Sudeste",
+  "Norte",
+  "Snæfellsnes",
+  "Mývatn",
+];
 
-  const types = [
-    "Cabana premium",
-    "Lodge de luxo",
-    "Casa de vidro",
-    "Resort Aurora",
-    "Hotel premium",
-    "Suite executiva",
-    "Cabana romântica",
-    "Hospedagem econômica",
-  ];
+const types = [
+  "Cabana premium",
+  "Lodge de luxo",
+  "Casa de vidro",
+  "Resort Aurora",
+  "Hotel boutique",
+  "Suíte panorâmica",
+  "Cabana romântica",
+  "Hospedagem econômica",
+  "Refúgio geotérmico",
+  "Villa nórdica",
+];
 
-  const tagsPool = [
-    "Aurora boreal",
-    "Vista panorâmica",
-    "Premium",
-    "Família",
-    "Casal",
-    "Luxo",
-    "Spa",
-    "Montanhas",
-    "Geleiras",
-    "Natureza",
-    "Executivo",
-    "Piscina",
-    "Vista neve",
-    "Centro",
-    "Romântico",
-    "Aventura",
-  ];
+const categories = [
+  "luxo",
+  "aurora",
+  "romantico",
+  "familia",
+  "premium",
+  "economico",
+];
 
-  const images = [
-    "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1400&q=80",
+const tagsPool = [
+  "Aurora boreal",
+  "Vista panorâmica",
+  "Premium",
+  "Família",
+  "Casal",
+  "Luxo",
+  "Spa",
+  "Montanhas",
+  "Geleiras",
+  "Natureza",
+  "Executivo",
+  "Piscina",
+  "Vista para neve",
+  "Centro",
+  "Romântico",
+  "Aventura",
+  "Águas termais",
+  "Praia de areia negra",
+];
 
-    "https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=1400&q=80",
+const names = [
+  "Northern Lights Cabin",
+  "Aurora Retreat",
+  "Glacier Lodge",
+  "Ice Cave Suites",
+  "Arctic Sky House",
+  "Midnight Sun Hotel",
+  "Polar Aurora Resort",
+  "Black Sand Cabin",
+  "Fjord Residence",
+  "Viking Mountain Lodge",
+  "Crystal Lagoon Villa",
+  "Nordic Horizon House",
+  "Lava Fields Retreat",
+  "Snowfall Glass Lodge",
+  "Moss Valley Cabin",
+  "Geothermal Hideaway",
+  "Arctic Circle Suites",
+  "Blue Ice Residence",
+  "Westfjord Panorama",
+  "Golden Circle Haven",
+];
 
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
+const images = [
+  "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1517824806704-9040b037703b?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1505692952047-1a78307da8f2?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1470214304380-aadaedcfff1b?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1520637836862-4d197d17c90a?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1600585152915-d208bec867a1?auto=format&fit=crop&w=1400&q=82",
+  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=82",
+];
 
-    "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=1400&q=80",
+function pick(array, index, offset = 0) {
+  return array[(index + offset) % array.length];
+}
 
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1505692952047-1a78307da8f2?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1400&q=80",
-
-    "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1400&q=80",
-  ];
-  const names = [
-    "Northern Lights Cabin",
-    "Aurora Retreat",
-    "Glacier Lodge",
-    "Ice Cave Suites",
-    "Arctic Sky House",
-    "Midnight Sun Hotel",
-    "Polar Aurora Resort",
-    "Black Sand Cabin",
-    "Fjord Residence",
-    "Viking Mountain Lodge",
-  ];
-
-  function random(array) {
-    return array[Math.floor(Math.random() * array.length)];
-  }
-
-  return {
-    id: index + 1,
-
-    name: `${random(names)} ${index + 1}`,
-
-    location: `${random(cities)}, Islândia`,
-
-    price: Math.floor(Math.random() * 450) + 120,
-
-    rating: (Math.random() * (5 - 4.5) + 4.5).toFixed(1),
-
-    guests: Math.floor(Math.random() * 8) + 2,
-
-    type: random(types),
-
-    image: images[index % images.length],
-    category: random([
-      "luxo",
-      "aurora",
-      "romantico",
-      "familia",
-      "premium",
-      "economico",
-    ]),
-
-    tags: [random(tagsPool), random(tagsPool), random(tagsPool)],
-  };
-});
+export const stays = Array.from({ length: 60 }, (_, index) => ({
+  id: index + 1,
+  name: `${pick(names, index)} ${String(index + 1).padStart(2, "0")}`,
+  location: `${pick(cities, index * 5)}, Islândia`,
+  price: 145 + ((index * 37) % 420),
+  rating: (4.5 + ((index * 7) % 6) / 10).toFixed(1),
+  guests: 2 + ((index * 3) % 7),
+  type: pick(types, index * 3),
+  image: pick(images, index),
+  category: pick(categories, index * 5),
+  tags: [
+    pick(tagsPool, index * 2),
+    pick(tagsPool, index * 2, 5),
+    pick(tagsPool, index * 2, 11),
+  ],
+}));

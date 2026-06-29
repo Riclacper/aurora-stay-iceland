@@ -1,11 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { stays } from "../data/stays.js";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { MapPin, Star, Users } from "lucide-react";
+import { stays } from "../data/stays.js";
+import { applyStayImageFallback } from "../utils/imageFallback.js";
 
 export default function StayDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const stay = stays.find((item) => item.id === Number(id));
 
   if (!stay) {
@@ -15,6 +16,8 @@ export default function StayDetails() {
       </section>
     );
   }
+
+  const bookingUrl = `/reserva/${stay.id}${location.search}`;
 
   return (
     <section className="container section">
@@ -30,47 +33,39 @@ export default function StayDetails() {
             src={stay.image}
             alt={stay.name}
             className="details-image"
-            onError={(e) => {
-              e.currentTarget.src = `https://picsum.photos/seed/fallback-details-${stay.id}/1200/800`;
-            }}
+            onError={(event) => applyStayImageFallback(event, stay.id)}
           />
         </div>
 
         <div className="details-content">
           <span className="pill">{stay.type}</span>
-
           <h1>{stay.name}</h1>
-
           <p className="muted">
             <MapPin size={18} />
             {stay.location}
           </p>
-
           <p className="muted">
             <Users size={18} />
             Até {stay.guests} hóspedes
           </p>
-
           <p className="rating-large">
             <Star size={18} fill="currentColor" />
             {stay.rating}
           </p>
-
           <div className="tag-list">
             {stay.tags.map((tag) => (
               <span key={tag}>{tag}</span>
             ))}
           </div>
-
           <div className="details-price">${stay.price}/noite</div>
-
           <p className="details-description">
             Hospedagem premium localizada em uma das regiões mais procuradas da
             Islândia para observação da aurora boreal, oferecendo conforto,
             experiência exclusiva e visual panorâmico.
           </p>
-
-          <button className="btn btn-primary">Reservar agora</button>
+          <Link to={bookingUrl} className="btn btn-primary">
+            Reservar agora
+          </Link>
         </div>
       </div>
     </section>

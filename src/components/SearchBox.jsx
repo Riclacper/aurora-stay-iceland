@@ -1,15 +1,41 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, CalendarDays, Users, MapPin } from "lucide-react";
+
+function formatDateInput(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function parseDateInput(value) {
+  return new Date(`${value}T12:00:00`);
+}
 
 export default function SearchBox({ compact = false }) {
   const navigate = useNavigate();
   const [destination, setDestination] = useState("");
-  const [checkIn, setCheckIn] = useState("2026-08-21");
-  const [checkOut, setCheckOut] = useState("2026-08-28");
+  const [checkIn, setCheckIn] = useState(() =>
+    formatDateInput(addDays(new Date(), 7)),
+  );
+  const [checkOut, setCheckOut] = useState(() =>
+    formatDateInput(addDays(new Date(), 14)),
+  );
   const [guests, setGuests] = useState("2");
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const today = formatDateInput(new Date());
+  const minimumCheckOut = checkIn
+    ? formatDateInput(addDays(parseDateInput(checkIn), 1))
+    : today;
 
   const destinations = [
     "Reykjavík",
@@ -29,10 +55,18 @@ export default function SearchBox({ compact = false }) {
     item.toLowerCase().includes(destination.toLowerCase()),
   );
 
+  function handleCheckInChange(value) {
+    setCheckIn(value);
+
+    if (value && (!checkOut || checkOut <= value)) {
+      setCheckOut(formatDateInput(addDays(parseDateInput(value), 1)));
+    }
+  }
+
   function handleSearch() {
     const params = new URLSearchParams();
 
-    if (destination) params.set("destino", destination);
+    if (destination.trim()) params.set("destino", destination.trim());
     if (checkIn) params.set("checkin", checkIn);
     if (checkOut) params.set("checkout", checkOut);
     if (guests) params.set("hospedes", guests);
@@ -42,7 +76,6 @@ export default function SearchBox({ compact = false }) {
 
   return (
     <div className={compact ? "search-box compact" : "search-box"}>
-      {/* DESTINO */}
       <label className="destination-field">
         <span>
           <MapPin size={16} />
@@ -51,10 +84,12 @@ export default function SearchBox({ compact = false }) {
 
         <div className="destination-wrapper">
           <input
+            name="destination"
             placeholder="Reykjavík, Vík, Höfn..."
             value={destination}
-            onChange={(e) => {
-              setDestination(e.target.value);
+            autoComplete="off"
+            onChange={(event) => {
+              setDestination(event.target.value);
               setShowSuggestions(true);
             }}
             onFocus={() => setShowSuggestions(true)}
@@ -86,7 +121,6 @@ export default function SearchBox({ compact = false }) {
         </div>
       </label>
 
-      {/* CHECK-IN */}
       <label>
         <span>
           <CalendarDays size={16} />
@@ -94,14 +128,14 @@ export default function SearchBox({ compact = false }) {
         </span>
 
         <input
+          name="checkin"
           type="date"
           value={checkIn}
-          min="2026-01-01"
-          onChange={(e) => setCheckIn(e.target.value)}
+          min={today}
+          onChange={(event) => handleCheckInChange(event.target.value)}
         />
       </label>
 
-      {/* CHECK-OUT */}
       <label>
         <span>
           <CalendarDays size={16} />
@@ -109,21 +143,25 @@ export default function SearchBox({ compact = false }) {
         </span>
 
         <input
+          name="checkout"
           type="date"
           value={checkOut}
-          min={checkIn}
-          onChange={(e) => setCheckOut(e.target.value)}
+          min={minimumCheckOut}
+          onChange={(event) => setCheckOut(event.target.value)}
         />
       </label>
 
-      {/* HÓSPEDES */}
       <label>
         <span>
           <Users size={16} />
           Hóspedes
         </span>
 
-        <select value={guests} onChange={(e) => setGuests(e.target.value)}>
+        <select
+          name="guests"
+          value={guests}
+          onChange={(event) => setGuests(event.target.value)}
+        >
           <option value="1">1 hóspede</option>
           <option value="2">2 hóspedes</option>
           <option value="4">4 hóspedes</option>
@@ -132,7 +170,6 @@ export default function SearchBox({ compact = false }) {
         </select>
       </label>
 
-      {/* BOTÃO */}
       <button className="btn btn-primary" type="button" onClick={handleSearch}>
         <Search size={18} />
         Buscar

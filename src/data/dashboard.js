@@ -1,13 +1,171 @@
-export const dashboardStats = [
-  { label: 'Reservas confirmadas', value: '225', trend: '+18%', helper: 'comparado ao mês anterior' },
-  { label: 'Hospedagens ativas', value: '42', trend: '+6', helper: 'novas propriedades' },
-  { label: 'Receita estimada', value: '$84.2k', trend: '+24%', helper: 'no trimestre' },
-  { label: 'Avaliação média', value: '4.9', trend: 'Excelente', helper: 'baseado em 638 avaliações' }
-]
+export const dashboardPeriods = {
+  "6m": {
+    label: "Últimos 6 meses",
+    stats: [
+      {
+        key: "reservations",
+        label: "Reservas simuladas",
+        value: "238",
+        trend: "+18%",
+        helper: "comparado ao período anterior",
+      },
+      {
+        key: "revenue",
+        label: "Receita projetada",
+        value: "US$ 92,4 mil",
+        trend: "+24%",
+        helper: "volume demonstrativo",
+      },
+      {
+        key: "dailyRate",
+        label: "Diária média",
+        value: "US$ 388",
+        trend: "+7%",
+        helper: "média das reservas",
+      },
+      {
+        key: "occupancy",
+        label: "Ocupação estimada",
+        value: "78%",
+        trend: "+9 p.p.",
+        helper: "indicador demonstrativo",
+      },
+    ],
+    bookingsEvolution: [
+      { label: "Jan", value: 24 },
+      { label: "Fev", value: 31 },
+      { label: "Mar", value: 36 },
+      { label: "Abr", value: 42 },
+      { label: "Mai", value: 48 },
+      { label: "Jun", value: 57 },
+    ],
+    statuses: [
+      { label: "Confirmadas", value: 154, tone: "confirmed" },
+      { label: "Pendentes", value: 58, tone: "pending" },
+      { label: "Canceladas", value: 26, tone: "cancelled" },
+    ],
+    revenueByRegion: [
+      { label: "Reykjavík", value: 28400 },
+      { label: "Costa Sul", value: 22100 },
+      { label: "Golden Circle", value: 17700 },
+      { label: "Vík", value: 13900 },
+      { label: "Akureyri", value: 10300 },
+    ],
+    topStays: [
+      { name: "Northern Lights Cabin 01", bookings: 32, rate: "92%" },
+      { name: "Glacier Lodge 03", bookings: 27, rate: "88%" },
+      { name: "Arctic Sky House 05", bookings: 24, rate: "84%" },
+      { name: "Golden Circle Haven 20", bookings: 21, rate: "81%" },
+    ],
+  },
+  "12m": {
+    label: "Últimos 12 meses",
+    stats: [
+      {
+        key: "reservations",
+        label: "Reservas simuladas",
+        value: "421",
+        trend: "+31%",
+        helper: "comparado ao período anterior",
+      },
+      {
+        key: "revenue",
+        label: "Receita projetada",
+        value: "US$ 168,7 mil",
+        trend: "+36%",
+        helper: "volume demonstrativo",
+      },
+      {
+        key: "dailyRate",
+        label: "Diária média",
+        value: "US$ 401",
+        trend: "+11%",
+        helper: "média das reservas",
+      },
+      {
+        key: "occupancy",
+        label: "Ocupação estimada",
+        value: "74%",
+        trend: "+6 p.p.",
+        helper: "indicador demonstrativo",
+      },
+    ],
+    bookingsEvolution: [
+      { label: "Jul", value: 20 },
+      { label: "Ago", value: 23 },
+      { label: "Set", value: 28 },
+      { label: "Out", value: 34 },
+      { label: "Nov", value: 38 },
+      { label: "Dez", value: 40 },
+      { label: "Jan", value: 24 },
+      { label: "Fev", value: 31 },
+      { label: "Mar", value: 36 },
+      { label: "Abr", value: 42 },
+      { label: "Mai", value: 48 },
+      { label: "Jun", value: 57 },
+    ],
+    statuses: [
+      { label: "Confirmadas", value: 281, tone: "confirmed" },
+      { label: "Pendentes", value: 96, tone: "pending" },
+      { label: "Canceladas", value: 44, tone: "cancelled" },
+    ],
+    revenueByRegion: [
+      { label: "Reykjavík", value: 49800 },
+      { label: "Costa Sul", value: 39600 },
+      { label: "Golden Circle", value: 31100 },
+      { label: "Vík", value: 27300 },
+      { label: "Akureyri", value: 20900 },
+    ],
+    topStays: [
+      { name: "Northern Lights Cabin 01", bookings: 58, rate: "90%" },
+      { name: "Glacier Lodge 03", bookings: 51, rate: "87%" },
+      { name: "Arctic Sky House 05", bookings: 47, rate: "85%" },
+      { name: "Golden Circle Haven 20", bookings: 39, rate: "80%" },
+    ],
+  },
+};
 
 export const recentBookings = [
-  { guest: 'Emma Johnson', stay: 'Northern Lights Cabin', date: '10/06/2026', status: 'Confirmada', total: '$1.490' },
-  { guest: 'Lars Petersen', stay: 'Glacier View Lodge', date: '14/06/2026', status: 'Pendente', total: '$1.860' },
-  { guest: 'Marina Costa', stay: 'Aurora Glass House', date: '22/06/2026', status: 'Confirmada', total: '$2.100' },
-  { guest: 'Noah Miller', stay: 'Fjord Snow Retreat', date: '02/07/2026', status: 'Confirmada', total: '$1.550' }
-]
+  {
+    guest: "Emma Johnson",
+    stay: "Northern Lights Cabin 01",
+    date: "03/07/2026",
+    status: "Confirmada",
+    total: "US$ 1.490,00",
+  },
+  {
+    guest: "Lars Petersen",
+    stay: "Glacier Lodge 03",
+    date: "08/07/2026",
+    status: "Pendente",
+    total: "US$ 1.860,00",
+  },
+  {
+    guest: "Marina Costa",
+    stay: "Arctic Sky House 05",
+    date: "14/07/2026",
+    status: "Confirmada",
+    total: "US$ 2.100,00",
+  },
+  {
+    guest: "Noah Miller",
+    stay: "Fjord Residence 09",
+    date: "22/07/2026",
+    status: "Confirmada",
+    total: "US$ 1.550,00",
+  },
+  {
+    guest: "Sofia Martins",
+    stay: "Golden Circle Haven 20",
+    date: "02/08/2026",
+    status: "Pendente",
+    total: "US$ 2.340,00",
+  },
+  {
+    guest: "Oliver Smith",
+    stay: "Lava Fields Retreat 13",
+    date: "06/08/2026",
+    status: "Cancelada",
+    total: "US$ 1.280,00",
+  },
+];
