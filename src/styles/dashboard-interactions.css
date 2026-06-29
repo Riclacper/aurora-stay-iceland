@@ -52,6 +52,10 @@
   text-align: center;
 }
 
+.status-chart-layout {
+  gap: 16px;
+}
+
 .interactive-donut-wrap {
   display: grid;
   width: 100%;
@@ -60,15 +64,20 @@
 
 .interactive-donut {
   display: block;
-  width: 220px;
-  height: 220px;
+  width: 236px;
+  height: 236px;
   overflow: visible;
   touch-action: manipulation;
+}
+
+.interactive-donut > circle:first-child {
+  stroke-width: 24px;
 }
 
 .status-donut-segment {
   cursor: pointer;
   outline: none;
+  stroke-width: 24px;
   transition: stroke-width 0.18s ease, opacity 0.18s ease,
     filter 0.18s ease;
 }
@@ -76,6 +85,7 @@
 .status-donut-segment:hover,
 .status-donut-segment:focus,
 .status-donut-segment.active {
+  stroke-width: 29px;
   filter: drop-shadow(0 7px 8px rgba(15, 23, 42, 0.2));
 }
 
@@ -83,29 +93,35 @@
   opacity: 0.82;
 }
 
+.donut-center-content {
+  transform: translateY(2px);
+  transform-origin: center;
+}
+
 .donut-total,
 .donut-percentage {
   fill: #020617;
   font-weight: 900;
+  letter-spacing: -0.035em;
 }
 
 .donut-total {
-  font-size: 34px;
+  font-size: 32px;
 }
 
 .donut-percentage {
-  font-size: 31px;
+  font-size: 27px;
 }
 
 .donut-label {
   fill: #475569;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 900;
 }
 
 .donut-value {
   fill: #94a3b8;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 800;
 }
 
@@ -167,8 +183,12 @@
   }
 
   .interactive-donut {
-    width: 205px;
-    height: 205px;
+    width: 218px;
+    height: 218px;
+  }
+
+  .donut-percentage {
+    font-size: 25px;
   }
 
   .chart-interaction-hint {
